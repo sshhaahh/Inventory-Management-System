@@ -1,6 +1,7 @@
 const {addProduct,showAllProducts,updateProduct,deleteProduct}=require("../controllers/productController");
-const {addSeller,showAllSeller,deleteUser}=require("../controllers/userController")
+const {addSeller,showAllSeller,deleteUser, addCustomer,showAllCustomer}=require("../controllers/userController")
 const {addCategory,showAllCategory,deleteCategory}=require("../controllers/categoryController")
+const { addToCart, getCart, removeFromCart } = require("../controllers/cartController");
 const  express=require("express")
 const router=express.Router();
 
@@ -20,6 +21,14 @@ router.post("/addcategory",addCategory)
 router.get("/categories",showAllCategory);
 router.delete("/deleteCategory/:id",deleteCategory)
 
+
+router.post("/addcustomer",addCustomer);
+router.get("/customers",showAllCustomer);
+
+
+router.post("/addtocart", addToCart);
+router.get("/cart/:userId", getCart);
+router.delete("/removefromcart",removeFromCart);
 
 
 
