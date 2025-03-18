@@ -15,17 +15,15 @@ const Navbar = () => {
 
   return (
     <nav>
-      {/* 🔹 Mobile Menu Button */}
       <div className='md:hidden border text-right text-3xl p-3'>
         <button onClick={() => setIsMenuOpen((prev) => !prev)}>
           <GiHamburgerMenu />
         </button>
       </div>
 
-      {/* 🔹 Desktop Navbar */}
-      <ul className='hidden md:flex justify-center items-start pl-12 p-3 font-bold text-black text-2xl bg-[#3C3D37] shadow-2xl lg:flex-col lg:min-h-screen lg:gap-y-2 transition-all duration-100 ease-in-out'>
+      <ul className='hidden md:flex justify-center items-center p-3 font-bold text-black text-2xl bg-[#3C3D37] shadow-2xl lg:flex-col lg:min-h-screen lg:gap-y-2 transition-all duration-100 ease-in-out'>
         {navItems.map((item, index) => (
-          <li key={index} className='p-3 rounded-2xl bg-white shadow-2xl w-4/5 text-center'>
+          <li key={index} className='p-3 rounded-2xl bg-white shadow-2xl w-5/5 text-center'>
             <NavLink
               to={item.path}
               className={({ isActive }) =>
@@ -38,7 +36,6 @@ const Navbar = () => {
         ))}
       </ul>
 
-      {/* 🔹 Mobile Menu */}
       {isMenuOpen && (
         <div className='border'>
           <ul className='grid grid-cols-2 place-items-center font-bold text-xl p-4 gap-3'>

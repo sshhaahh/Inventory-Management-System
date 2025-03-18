@@ -14,7 +14,7 @@ const App = () => {
   console.log(URL)
   
   return (
-    <div className='bg-[#ECDFCC] min-h-screen lg:grid lg:grid-cols-[15%_70%] gap-6'>
+    <div className='bg-[#ECDFCC] min-h-screen lg:grid lg:grid-cols-[15%_70%] gap-6 lg:text-xl'>
       <div className='lg:h-full'>
         <Navbar></Navbar>
       </div>

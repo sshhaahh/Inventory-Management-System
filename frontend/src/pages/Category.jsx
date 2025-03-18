@@ -6,7 +6,6 @@ const Category = ({url}) => {
     const [addScreen, setAddScreen] = useState(false);
     const [categoryName, setCategoryName] = useState("");
 
-    // Fetch Categories
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -32,7 +31,6 @@ const Category = ({url}) => {
         };
     }, []);
 
-    // Handle Add Category
     const handleAddCategory = async (e) => {
         e.preventDefault();
         try {
@@ -48,7 +46,6 @@ const Category = ({url}) => {
         }
     };
 
-    // Handle Delete Category
     const handleDelete = async (id) => {
         if (window.confirm("Are you sure you want to delete this category?")) {
             try {
@@ -62,7 +59,6 @@ const Category = ({url}) => {
 
     return (
         <div className="p-4 sm:p-6">
-            {/* Header */}
             <div className="flex justify-between items-center font-serif font-bold text-2xl mb-6">
                 <h1>Categories</h1>
                 <button
@@ -73,7 +69,6 @@ const Category = ({url}) => {
                 </button>
             </div>
 
-            {/* Category Table */}
             <div className="overflow-x-auto">
                 <table className="w-full border border-gray-300">
                     <thead className="bg-gray-100 text-gray-700 text-sm">
@@ -110,7 +105,6 @@ const Category = ({url}) => {
                 </table>
             </div>
 
-            {/* Add Category Modal */}
             {addScreen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[70%] md:w-[50%] lg:w-[40%]">

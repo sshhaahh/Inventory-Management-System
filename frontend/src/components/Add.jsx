@@ -14,7 +14,7 @@ const Add = ({ setAddScreen }) => {
     seller: "",
   });
 
-  // ✅ Fetch categories and sellers when component loads
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,7 +80,7 @@ const Add = ({ setAddScreen }) => {
       <label htmlFor="price" className="font-medium">Price</label>
       <input type="number" required name="price" value={formData.price} onChange={handleChange} className="border p-2 rounded-md w-full" />
 
-      {/* 🔹 Category Select */}
+ 
       <label htmlFor="category" className="font-medium">Category</label>
       <select name="category" required value={formData.category} onChange={handleChange} className="border p-2 rounded-md w-full">
         <option value="">Select a category</option>
@@ -89,7 +89,6 @@ const Add = ({ setAddScreen }) => {
         ))}
       </select>
 
-      {/* 🔹 Seller Select */}
       <label htmlFor="seller" required className="font-medium">Seller</label>
       <select name="seller" value={formData.seller} onChange={handleChange} className="border p-2 rounded-md w-full">
         <option value="">Select a seller</option>

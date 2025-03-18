@@ -46,7 +46,6 @@ const Products = ({url}) => {
     };
   }, []);
 
-  // ✅ Filter & Sort Products
   useEffect(() => {
     let filtered = [...products];
 
@@ -107,7 +106,6 @@ const Products = ({url}) => {
         </button>
       </div>
 
-      {/* ✅ Search Input */}
       <div className="mb-4">
         <input
           type="text"
@@ -200,7 +198,6 @@ const Products = ({url}) => {
         </table>
       </div>
 
-      {/* ✅ Add Product Modal */}
       {addScreen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[70%] md:w-[50%] lg:w-[40%]">
@@ -209,7 +206,6 @@ const Products = ({url}) => {
         </div>
       )}
 
-      {/* ✅ Edit Product Modal */}
       {editScreen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[70%] md:w-[50%] lg:w-[40%]">

@@ -14,7 +14,6 @@ const Orders = ({url}) => {
                     const validOrders = res.data.cart.items.filter(order => order.product !== null);
                     setOrders(validOrders);
 
-                    // ✅ Calculate Total Price
                     const total = validOrders.reduce((sum, order) => sum + (order.quantity * (order.product?.price || 0)), 0);
                     setTotalPrice(total);
                 }
@@ -26,7 +25,6 @@ const Orders = ({url}) => {
         fetchOrders();
     }, []);
 
-    // ✅ Remove Order Function (Using productId instead of orderId)
     const handleRemoveOrder = async (productId) => {
         try {
             await axios.delete(`${url}/removefromcart`, {
@@ -36,10 +34,8 @@ const Orders = ({url}) => {
                 }
             })
             const updatedOrders = orders.filter(order => order.product._id !== productId);
-            // console.log(productId)
             setOrders(updatedOrders);
 
-            // ✅ Update Total Price
             const total = updatedOrders.reduce((sum, order) => sum + (order.quantity * (order.product?.price || 0)), 0);
             setTotalPrice(total);
         } catch (error) {
@@ -47,14 +43,13 @@ const Orders = ({url}) => {
         }
     };
 
-    // ✅ Checkout Function
     const handleCheckout = async () => {
         try {
             const res = await axios.post(`${url}/cart/checkout`, { userId: "67d54afd442b3f4dcdcfa352" });
 
             if (res.data.success) {
                 alert(`Checkout successful! Total Amount Paid: $${totalPrice.toFixed(2)}`);
-                setOrders([]); // Clear orders after checkout
+                setOrders([]);  
                 setTotalPrice(0);
             } else {
                 alert("Checkout failed. Try again.");
@@ -114,7 +109,6 @@ const Orders = ({url}) => {
                 </table>
             </div>
 
-            {/* ✅ Total Price & Checkout Button */}
             {orders.length > 0 && (
                 <div className="flex justify-between items-center mt-6 p-4 border-t">
                     <h2 className="text-xl font-bold">Total: ${totalPrice.toFixed(2)}</h2>
