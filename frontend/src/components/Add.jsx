@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast} from "react-toastify";
 
 const Add = ({ setAddScreen }) => {
   const [categories, setCategories] = useState([]);
@@ -32,17 +33,17 @@ const Add = ({ setAddScreen }) => {
     fetchData();
   }, []);
 
-  // ✅ Handle input changes
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ Add new product
+
   const addProduct = async () => {
     try {
       const response = await axios.post("http://localhost:3000/api/addproduct", formData);
       if (response.data.success) {
-        alert("Product added successfully!");
+        toast.success("Product added successfully!");
         setAddScreen(false);
         window.dispatchEvent(new Event("productUpdated"));
       } else {
@@ -50,12 +51,16 @@ const Add = ({ setAddScreen }) => {
       }
     } catch (error) {
       console.error("Add operation failed:", error);
-      alert("An error occurred while adding the product.");
+      toast.error("An error occurred while adding the product.");
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!formData.name || !formData.description || !formData.quantity || !formData.price || !formData.category || !formData.seller) {
+      toast.error("All field Required!")
+      return;
+    }
     addProduct();
   };
 
@@ -64,20 +69,20 @@ const Add = ({ setAddScreen }) => {
       <h1 className="text-xl font-bold text-center">Add New Product</h1>
 
       <label htmlFor="name" className="font-medium">Name</label>
-      <input type="text" name="name" value={formData.name} onChange={handleChange} className="border p-2 rounded-md w-full" />
+      <input type="text" required name="name" value={formData.name} onChange={handleChange} className="border p-2 rounded-md w-full" />
 
       <label htmlFor="description" className="font-medium">Description</label>
-      <textarea name="description" value={formData.description} onChange={handleChange} className="border p-2 rounded-md w-full" />
+      <textarea name="description" required value={formData.description} onChange={handleChange} className="border p-2 rounded-md w-full" />
 
       <label htmlFor="quantity" className="font-medium">Quantity</label>
-      <input type="number" name="quantity" value={formData.quantity} onChange={handleChange} className="border p-2 rounded-md w-full" />
+      <input type="number" required name="quantity" value={formData.quantity} onChange={handleChange} className="border p-2 rounded-md w-full" />
 
       <label htmlFor="price" className="font-medium">Price</label>
-      <input type="number" name="price" value={formData.price} onChange={handleChange} className="border p-2 rounded-md w-full" />
+      <input type="number" required name="price" value={formData.price} onChange={handleChange} className="border p-2 rounded-md w-full" />
 
       {/* 🔹 Category Select */}
       <label htmlFor="category" className="font-medium">Category</label>
-      <select name="category" value={formData.category} onChange={handleChange} className="border p-2 rounded-md w-full">
+      <select name="category" required value={formData.category} onChange={handleChange} className="border p-2 rounded-md w-full">
         <option value="">Select a category</option>
         {categories.map((category) => (
           <option key={category._id} value={category._id}>{category.name}</option>
@@ -85,7 +90,7 @@ const Add = ({ setAddScreen }) => {
       </select>
 
       {/* 🔹 Seller Select */}
-      <label htmlFor="seller" className="font-medium">Seller</label>
+      <label htmlFor="seller" required className="font-medium">Seller</label>
       <select name="seller" value={formData.seller} onChange={handleChange} className="border p-2 rounded-md w-full">
         <option value="">Select a seller</option>
         {sellers.map((seller) => (

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const AddSeller = ({ setAddScreen }) => {
     const [sellerData, setSellerData] = useState({
@@ -17,7 +18,7 @@ const AddSeller = ({ setAddScreen }) => {
         try {
             const res = await axios.post("http://localhost:3000/api/addseller", sellerData);
             if (res.data.success) {
-                alert("Seller added successfully!");
+                toast.success("Seller added successfully!");
                 window.dispatchEvent(new Event("sellerUpdated"));
                 setAddScreen(false);
             }
@@ -51,8 +52,9 @@ const AddSeller = ({ setAddScreen }) => {
             />
 
             <input 
-                type="text"
+                type="number"
                 name="number"
+                min={1000000000}
                 value={sellerData.number}
                 onChange={handleChange}
                 placeholder="Seller Number"

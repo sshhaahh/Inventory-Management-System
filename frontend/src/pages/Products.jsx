@@ -14,6 +14,8 @@ const Products = () => {
   const [sortOrder, setSortOrder] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectCategory, setSelectCategory] = useState("all");
+      const [showMore, setShowMore] = useState({});
+  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -146,10 +148,27 @@ const Products = () => {
           <tbody>
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product, index) => (
-                <tr key={product._id} className={`${product.quantity < 10 ? "bg-red-600" : "hover:bg-gray-50 odd:bg-gray-100"}`}>
+                <tr key={product._id} className={`${product.quantity < 10 ? "bg-red-300" : "hover:bg-gray-50 odd:bg-gray-100"}`}>
                   <td className="border px-3 py-2 text-center">{index + 1}</td>
                   <td className="border px-3 py-2">{product.name}</td>
-                  <td className="border px-3 py-2 hidden sm:table-cell">{product.description}</td>
+                  <td className="border px-3 py-2 hidden sm:table-cell ">{product.description.length > 40 ? (
+                                            <>
+                                                {showMore[product._id]
+                                                    ? product.description
+                                                    : product.description.slice(0, 40) + "... "}
+                                                <button
+                                                    onClick={() => setShowMore(prev => ({
+                                                        ...prev,
+                                                        [product._id]: !prev[product._id]
+                                                    }))}
+                                                    className="text-[#2196F3] font-bold"
+                                                >
+                                                    {showMore[product._id] ? "show less" : "show more"}
+                                                </button>
+                                            </>
+                                        ) : (
+                                            product.description
+                                        )}</td>
                   <td className="border px-3 py-2 text-center">{product.quantity}</td>
                   <td className="border px-3 py-2 text-center">${product.price}</td>
                   <td className="border px-3 py-2 hidden md:table-cell">{product.seller?.name || 'N/A'}</td>

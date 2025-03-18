@@ -9,6 +9,7 @@ const BuyProduct = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [minPrice, setMinPrice] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
+    const [showMore, setShowMore] = useState({});
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -32,8 +33,8 @@ const BuyProduct = () => {
     const handleBuy = async (product) => {
         const order = {
             "userId": "67d54afd442b3f4dcdcfa352",
-            "productId": `${product._id}`,
-            "quantity": `${product.quantity}`
+            "productId": product._id,  // ✅ No need for template literals here
+            "quantity": product.quantity
         };
         try {
             const response = await axios.post("http://localhost:3000/api/addtocart", order);
@@ -128,13 +129,32 @@ const BuyProduct = () => {
                                 <tr key={product._id} className="hover:bg-gray-50 odd:bg-gray-100">
                                     <td className="border px-3 py-2 text-center">{index + 1}</td>
                                     <td className="border px-3 py-2">{product.name}</td>
-                                    <td className="border px-3 py-2 hidden sm:table-cell">{product.description}</td>
+                                    <td className="border px-3 py-2 hidden sm:table-cell">
+                                        {product.description.length > 40 ? (
+                                            <>
+                                                {showMore[product._id]
+                                                    ? product.description
+                                                    : product.description.slice(0, 40) + "... "}
+                                                <button
+                                                    onClick={() => setShowMore(prev => ({
+                                                        ...prev,
+                                                        [product._id]: !prev[product._id]
+                                                    }))}
+                                                    className="text-[#2196F3] font-bold"
+                                                >
+                                                    {showMore[product._id] ? "show less" : "show more"}
+                                                </button>
+                                            </>
+                                        ) : (
+                                            product.description
+                                        )}
+                                    </td>
                                     <td className="border px-3 py-2 text-center">{product.quantity}</td>
                                     <td className="border px-3 py-2 text-center">${product.price}</td>
                                     <td className="border px-3 py-2 hidden md:table-cell">{product.seller?.name || "N/A"}</td>
                                     <td className="border px-3 py-2 hidden lg:table-cell">{product.category?.name || "N/A"}</td>
-                                    <td className="border px-3 py-2 flex gap-2 justify-center">
-                                        <button className="text-[#2196F3]" onClick={() => handleBuy(product)}> Buy</button>
+                                    <td className="border-t-2 px-3 py-2 flex gap-2 justify-center">
+                                        <button className="text-[#2196F3] font-bold" onClick={() => handleBuy(product)}> Buy</button>
                                     </td>
                                 </tr>
                             ))
