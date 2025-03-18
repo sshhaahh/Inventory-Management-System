@@ -27,4 +27,3 @@ This is a **full-stack web application** developed using the **MERN stack**. The
 ## 🎥 Demo Video  
 📌 Watch Here:  https://youtu.be/qUIhOTKXlxk
 
-## 📂 Project Structure  
