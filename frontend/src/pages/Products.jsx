@@ -4,7 +4,7 @@ import Edit from '../components/Edit';
 import Add from '../components/Add';
 import { FaSort } from "react-icons/fa";
 
-const Products = () => {
+const Products = ({url}) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [search, setSearch] = useState("");
@@ -20,13 +20,13 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/showproducts");
+        const response = await axios.get(`${url}/showproducts`);
         if (response.data.success) {
           setProducts(response.data.data);
           setFilteredProducts(response.data.data);
         }
 
-        const categoryRes = await axios.get("http://localhost:3000/api/categories");
+        const categoryRes = await axios.get(`${url}/categories`);
         if (categoryRes.data.success) {
           setCategories(categoryRes.data.data);
         }
@@ -87,7 +87,7 @@ const Products = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await axios.delete(`http://localhost:3000/api/deleteproduct/${id}`);
+        await axios.delete(`${url}/deleteproduct/${id}`);
         setProducts(prevProducts => prevProducts.filter(product => product._id !== id));
       } catch (error) {
         console.error("Error deleting product:", error);

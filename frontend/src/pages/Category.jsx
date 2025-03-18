@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const Category = () => {
+const Category = ({url}) => {
     const [categories, setCategories] = useState([]);
     const [addScreen, setAddScreen] = useState(false);
     const [categoryName, setCategoryName] = useState("");
@@ -10,7 +10,7 @@ const Category = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await axios.get("http://localhost:3000/api/categories");
+                const res = await axios.get(`${url}/categories`);
                 if (res.data.success) {
                     setCategories(res.data.data);
                 }
@@ -36,7 +36,7 @@ const Category = () => {
     const handleAddCategory = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:3000/api/addcategory", { name: categoryName });
+            const res = await axios.post(`${url}/addcategory`, { name: categoryName });
             if (res.data.success) {
                 alert("Category added successfully!");
                 window.dispatchEvent(new Event("categoryUpdated"));
@@ -52,7 +52,7 @@ const Category = () => {
     const handleDelete = async (id) => {
         if (window.confirm("Are you sure you want to delete this category?")) {
             try {
-                await axios.delete(`http://localhost:3000/api/deletecategory/${id}`);
+                await axios.delete(`${url}/deletecategory/${id}`);
                 setCategories(categories.filter((cat) => cat._id !== id));
             } catch (error) {
                 console.error("Error deleting category:", error);

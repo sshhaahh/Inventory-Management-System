@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Dashboard = () => {
+const Dashboard = ({url}) => {
     const [totalSellers, setTotalSellers] = useState(0);
     const [totalCategories, setTotalCategories] = useState(0);
     const [totalorders,setTotalorders]=useState(0);
@@ -11,20 +11,21 @@ const Dashboard = () => {
 
     useEffect(() => {
         const fetchDashboardData = async () => {
+            console.log(url)
             try {
-                const sellersRes = await axios.get("http://localhost:3000/api/sellers");
+                const sellersRes = await axios.get(`${url}/sellers`);
                 if (sellersRes.data.success) {
                     setTotalSellers(sellersRes.data.data.length);
                     setRecentSellers(sellersRes.data.data.slice(-5)); 
                 }
 
-                const categoriesRes = await axios.get("http://localhost:3000/api/categories");
+                const categoriesRes = await axios.get(`${url}/categories`);
                 if (categoriesRes.data.success) {
                     setTotalCategories(categoriesRes.data.data.length);
                     setRecentCategories(categoriesRes.data.data.slice(-5)); 
                 }
 
-                const orderRes= await axios.get("http://localhost:3000/api/cart/67d54afd442b3f4dcdcfa352");
+                const orderRes= await axios.get(`${url}/cart/67d54afd442b3f4dcdcfa352`);
                 if(orderRes.data.success){
                     setTotalorders(orderRes.data.cart.items.length);
                     setRecentorders(orderRes.data.cart.items.slice(-5));

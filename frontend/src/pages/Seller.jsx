@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import AddSeller from "../components/AddSeller";
 
-const Seller = () => {
+const Seller = ({url}) => {
     const [allSellers, setAllSellers] = useState([]);
     const [addScreen, setAddScreen] = useState(false);
     const [editScreen, setEditScreen] = useState(false);
@@ -10,7 +10,7 @@ const Seller = () => {
 
     const fetchSellers = async () => {
         try {
-            const res = await axios.get("http://localhost:3000/api/sellers");
+            const res = await axios.get(`${url}/sellers`);
             if (res.data.success) {
                 setAllSellers(res.data.data);
             }
@@ -28,9 +28,10 @@ const Seller = () => {
 
 
     const handleDelete = async (id) => {
+       
         if (window.confirm("Are you sure you want to delete this seller?")) {
             try {
-                await axios.delete(`http://localhost:3000/api/deleteseller/${id}`);
+                await axios.delete(`${url}/deleteseller/${id}`);
                 fetchSellers();
             } catch (error) {
                 console.error("Error deleting seller:", error);

@@ -1,10 +1,7 @@
-console.log("Backend URL:", import.meta.env.VITE_BACKEND_URL);
-
-
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-const BuyProduct = () => {
+const BuyProduct = ({url}) => {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -17,7 +14,7 @@ const BuyProduct = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/showproducts");
+                const response = await axios.get(`${url}/showproducts`);
                 if (response.data.success) {
                     setProducts(response.data.data);
                     setFilteredProducts(response.data.data);
@@ -36,11 +33,11 @@ const BuyProduct = () => {
     const handleBuy = async (product) => {
         const order = {
             "userId": "67d54afd442b3f4dcdcfa352",
-            "productId": product._id,  // ✅ No need for template literals here
+            "productId": product._id,
             "quantity": product.quantity
         };
         try {
-            const response = await axios.post("http://localhost:3000/api/addtocart", order);
+            const response = await axios.post(`${url}/addtocart`, order);
             if (response.data.success) {
                 alert("Product added to cart successfully!");
             }

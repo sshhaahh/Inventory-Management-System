@@ -19,4 +19,8 @@ app.use("/api",router)
 app.listen(process.env.PORT,()=>{
     console.log(`Server run on port ${process.env.PORT}`)
 })
+app.get("/", (req, res) => {
+    res.send("<h1>🚀 Server is Running Successfully!</h1>");
+});
+
 

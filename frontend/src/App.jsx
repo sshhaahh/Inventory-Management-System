@@ -8,7 +8,11 @@ import Category from './pages/Category'
 import BuyProduct from './pages/BuyProduct'
 import Orders from './pages/Orders'
 
+
 const App = () => {
+  const URL = import.meta.env.VITE_BACKEND_URL;
+  console.log(URL)
+  
   return (
     <div className='bg-[#ECDFCC] min-h-screen lg:grid lg:grid-cols-[15%_70%] gap-6'>
       <div className='lg:h-full'>
@@ -17,12 +21,12 @@ const App = () => {
 
       <div className='p-3 min-h-screen w-full'>
         <Routes>
-          <Route path="/" element={<Dashboard/>} />
-          <Route path="/sellers" element={<Seller/>}/>
-          <Route path="/products" element={<Products/>}/>
-          <Route path="/categories" element={<Category/>}/>
-          <Route path="/buy" element={<BuyProduct/>}/>
-          <Route path="/orders" element={<Orders/>}/>
+          <Route path="/" element={<Dashboard url={URL}/>} />
+          <Route path="/sellers" element={<Seller url={URL}/>}/>
+          <Route path="/products" element={<Products url={URL}/>}/>
+          <Route path="/categories" element={<Category url={URL}/>}/>
+          <Route path="/buy" element={<BuyProduct url={URL}/>}/>
+          <Route path="/orders" element={<Orders url={URL}/>}/>
 
 
 

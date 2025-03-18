@@ -1,14 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-const Orders = () => {
+const Orders = ({url}) => {
     const [orders, setOrders] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const res = await axios.get("http://localhost:3000/api/cart/67d54afd442b3f4dcdcfa352");
+                const res = await axios.get(`${url}/cart/67d54afd442b3f4dcdcfa352`);
 
                 if (res.data.success && res.data.cart && res.data.cart.items) {
                     const validOrders = res.data.cart.items.filter(order => order.product !== null);
@@ -29,7 +29,7 @@ const Orders = () => {
     // ✅ Remove Order Function (Using productId instead of orderId)
     const handleRemoveOrder = async (productId) => {
         try {
-            await axios.delete(`http://localhost:3000/api/removefromcart`, {
+            await axios.delete(`${url}/removefromcart`, {
                 data: {
                     userId: "67d54afd442b3f4dcdcfa352",
                     productId: productId
@@ -50,7 +50,7 @@ const Orders = () => {
     // ✅ Checkout Function
     const handleCheckout = async () => {
         try {
-            const res = await axios.post("http://localhost:3000/api/cart/checkout", { userId: "67d54afd442b3f4dcdcfa352" });
+            const res = await axios.post(`${url}/cart/checkout`, { userId: "67d54afd442b3f4dcdcfa352" });
 
             if (res.data.success) {
                 alert(`Checkout successful! Total Amount Paid: $${totalPrice.toFixed(2)}`);
