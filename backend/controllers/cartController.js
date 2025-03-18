@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 
 
-// Add product to cart
+
 exports.addToCart = async (req, res) => {
     try {
         const { userId, productId, quantity } = req.body;
@@ -55,10 +55,19 @@ exports.getCart = async (req, res) => {
     try {
         const { userId } = req.params;
 
-        const cart = await Cart.findOne({ user: userId }).populate("items.product");
+        let cart = await Cart.findOne({ user: userId }).populate("items.product");
 
         if (!cart) {
             return res.status(404).json({ success: false, message: "Cart not found!" });
+        }
+
+       
+        const updatedItems = cart.items.filter(item => item.product !== null);
+
+       
+        if (updatedItems.length !== cart.items.length) {
+            cart.items = updatedItems;
+            await cart.save();
         }
 
         return res.status(200).json({ success: true, cart });
@@ -67,6 +76,7 @@ exports.getCart = async (req, res) => {
         return res.status(500).json({ success: false, message: "Failed to fetch cart." });
     }
 };
+
 
 
 

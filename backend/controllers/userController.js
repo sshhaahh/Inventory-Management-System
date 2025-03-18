@@ -39,13 +39,13 @@ exports.showAllSeller=async(req,res)=>{
 
         if(sellers.length===0){
             return res.status(404).json({ 
-                status:false,
+                success:false,
                 message:"Sellers not found!"
             })
         }
 
         return res.status(200).json({
-            status:true,
+            success:true,
             message:"All Sellers are ",
             data:sellers,
         })

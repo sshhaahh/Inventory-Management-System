@@ -1,3 +1,6 @@
+console.log("Backend URL:", import.meta.env.VITE_BACKEND_URL);
+
+
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 

@@ -1,99 +1,107 @@
-const mongoose=require("mongoose")
-const Product=require("../models/Product");
+const mongoose = require("mongoose");
+const Product = require("../models/Product");
 const User = require("../models/User");
 
-exports.addProduct=async(req,res)=>{
-    try{
-        const {name,description,quantity,category,price,seller}=req.body;
-        if(!name || !description || !quantity || !category || !price || !seller){
+// ✅ Add Product (Fixed Seller Verification)
+exports.addProduct = async (req, res) => {
+    try {
+        const { name, description, quantity, category, price, seller } = req.body;
+
+        if (!name || !description || !quantity || !category || !price || !seller) {
             return res.status(400).json({
-                success:false,
-                message:"Input all field for add product."
-            })
+                success: false,
+                message: "All fields are required to add a product."
+            });
         }
 
-        const existingSeller=await User.findById({ _id: seller, role: "Seller" });
-        if(!existingSeller){
+        // 🛠 Fix: findOne instead of findById
+        const existingSeller = await User.findOne({ _id: seller, role: "Seller" });
+        if (!existingSeller) {
             return res.status(404).json({
-                success:false,
-                message:"Seller not found."
-            })
+                success: false,
+                message: "Seller not found or not a valid seller."
+            });
         }
 
-        const newProduct=await Product.create({
-            name,description,quantity,category,price,seller,
-        })
+        // Create Product
+        const newProduct = await Product.create({
+            name, description, quantity, category, price, seller
+        });
 
-        await User.findByIdAndUpdate(seller,
-            {
-                $push:{products:newProduct._id}
-            },
-            {
-                new:true
-            })
+        // Push product to seller's product list
+        await User.findByIdAndUpdate(seller, {
+            $push: { products: newProduct._id }
+        }, { new: true });
 
-        return res.status(200).json({
-            success:true,
-            message:"created product successfully.",
-            data:newProduct
-        })
-    }catch(e){
-        console.log("Failed to Add product.");
+        return res.status(201).json({
+            success: true,
+            message: "Product created successfully.",
+            data: newProduct
+        });
+
+    } catch (e) {
+        console.error("Failed to add product:", e);
         return res.status(500).json({
-            success:false,
-            message:"nhi hua"
-        })
+            success: false,
+            message: "Failed to add product.",
+            error: e.message
+        });
     }
-}
+};
 
+// ✅ Show All Products (Includes Category & Seller Info)
+exports.showAllProducts = async (req, res) => {
+    try {
+        const products = await Product.find()
+            .populate("seller", "name email role") // Populate seller info
+            .populate("category", "name"); // Populate category info
 
-exports.showAllProducts=async(req,res)=>{
-    try{
-        const products=await Product.find({});
-        if(!products){
+        if (!products || products.length === 0) {
             return res.status(204).json({
-                success:false,
-                message:"Empty!"
-            })
+                success: false,
+                message: "No products found."
+            });
         }
+
         return res.status(200).json({
-            success:true,
-            message:"Show all products is working.",
-            data:products
-        })
-    }catch(e){
-        console.error(e);
+            success: true,
+            message: "All products retrieved successfully.",
+            data: products
+        });
+
+    } catch (e) {
+        console.error("Error fetching products:", e);
         return res.status(500).json({
-            success:false,
-            message:"Failed to show all product."
-        })
+            success: false,
+            message: "Failed to fetch products.",
+            error: e.message
+        });
     }
-}
+};
 
-exports.updateProduct=async(req,res)=>{
-    try{
+// ✅ Update Product (Fixed Typo & Added Validation)
+exports.updateProduct = async (req, res) => {
+    try {
         const { id } = req.params;
-        const {name,description,quantity,price}=req.body;
-       
-        const updateField={};
+        const { name, description, quantity, price, category, seller } = req.body;
 
-        if(name)updateField.name=name;
-        if(description)updateField.description=description;
-        if(quantity)updateField.quantity=quantity;
-        if(price)updateField.price=price;
+        const updateFields = {};
+        if (name) updateFields.name = name;
+        if (description) updateFields.description = description;
+        if (quantity) updateFields.quantity = quantity;
+        if (price) updateFields.price = price;
+        if (category) updateFields.category = category;
+        if (seller) updateFields.seller = seller;
 
-
-        if(Object.keys(updateField).lenght===0){
+        // 🛠 Fix: Typo `lenght` → `length`
+        if (Object.keys(updateFields).length === 0) {
             return res.status(400).json({
-                success:false,
-                message:"Enter A field."
-            })
+                success: false,
+                message: "Please provide at least one field to update."
+            });
         }
 
-        const updatedProduct=await Product.findByIdAndUpdate(id,
-            updateField,
-            {new:true,runValidators: true}
-        )
+        const updatedProduct = await Product.findByIdAndUpdate(id, updateFields, { new: true, runValidators: true },{new:true});
 
         if (!updatedProduct) {
             return res.status(404).json({
@@ -103,52 +111,58 @@ exports.updateProduct=async(req,res)=>{
         }
 
         return res.status(200).json({
-            success:true,
-            message:"Updated Sucessfully.",
-            data:updatedProduct,
-        })
+            success: true,
+            message: "Product updated successfully.",
+            data: updatedProduct
+        });
 
-    }catch(e){
-        console.error(e);
+    } catch (e) {
+        console.error("Update error:", e);
         return res.status(500).json({
-            success:false,
-            message:"Update failed."
-        })
+            success: false,
+            message: "Failed to update product.",
+            error: e.message
+        });
     }
-}
+};
 
-exports.deleteProduct=async(req,res)=>{
-    try{
-        const {id}=req.params;
+// ✅ Delete Product (Also Removes from Seller’s Product List)
+exports.deleteProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
 
-        if(!id){
-            return res.status(404).json({
-                success:false,
-                message:"Invalid Id."
-            })
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid product ID."
+            });
         }
 
-        const product=await Product.findByIdAndDelete(id);
-
-        if(!product){
+        const product = await Product.findByIdAndDelete(id);
+        if (!product) {
             return res.status(404).json({
-                success:false,
-                message:"not found in db for delete."
-            })
+                success: false,
+                message: "Product not found."
+            });
         }
 
+        // 🛠 Fix: Remove product from seller's product array
+        await User.findByIdAndUpdate(product.seller, {
+            $pull: { products: product._id }
+        });
 
         return res.status(200).json({
-            success:true,
-            message:"Deleted Successfull.",
-            data:product,
-        })
+            success: true,
+            message: "Product deleted successfully.",
+            data: product
+        });
 
-    }catch(e){
-        console.error(e);
+    } catch (e) {
+        console.error("Delete error:", e);
         return res.status(500).json({
-            success:false,
-            message:"Delete failed."
-        })
+            success: false,
+            message: "Failed to delete product.",
+            error: e.message
+        });
     }
-}
+};

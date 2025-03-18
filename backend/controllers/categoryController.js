@@ -26,7 +26,7 @@ exports.addCategory=async(req,res)=>{
 
 exports.showAllCategory=async(req,res)=>{
     try{
-        const category=await Category.find({});
+        const category=await Category.find({}).populate();
         if(category.length===0){
             return res.status(404).json({
                 success:false,
