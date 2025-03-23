@@ -99,7 +99,7 @@ const Seller = ({url}) => {
             {addScreen && (
                 <div className="fixed inset-0 flex-col flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[70%] md:w-[50%] lg:w-[40%]">
-                        <AddSeller setAddScreen={setAddScreen} />
+                        <AddSeller setAddScreen={setAddScreen} url={url} />
                     <button className="w-full text-white mt-2 rounded-sm p-2 bg-red-600" onClick={()=>setAddScreen(false)}>Close</button>
                     </div>
 

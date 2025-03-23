@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Edit = ({ setEditScreen, forEdit }) => {
+  const URL = import.meta.env.VITE_BACKEND_URL;
+
   const [categories, setCategories] = useState([]);
   const [sellers, setSellers] = useState([]);
   const [formData, setFormData] = useState({
@@ -30,8 +32,8 @@ const Edit = ({ setEditScreen, forEdit }) => {
     const fetchData = async () => {
       try {
         const [categoryRes, sellerRes] = await Promise.all([
-          axios.get("http://localhost:3000/api/categories"),
-          axios.get("http://localhost:3000/api/sellers"),
+          axios.get(`${URL}/categories`),
+          axios.get(`${URL}/sellers`),
         ]);
 
         if (categoryRes.data.success) setCategories(categoryRes.data.data);
@@ -51,7 +53,7 @@ const Edit = ({ setEditScreen, forEdit }) => {
   const editProduct = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/updateproduct/${forEdit._id}`,
+        `${URL}/updateproduct/${forEdit._id}`,
         formData
       );
       if (response.data.success) {

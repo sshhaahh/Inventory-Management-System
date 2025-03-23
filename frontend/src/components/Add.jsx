@@ -3,6 +3,8 @@ import axios from "axios";
 import { toast} from "react-toastify";
 
 const Add = ({ setAddScreen }) => {
+
+  const URL = import.meta.env.VITE_BACKEND_URL;
   const [categories, setCategories] = useState([]);
   const [sellers, setSellers] = useState([]);
   const [formData, setFormData] = useState({
@@ -19,8 +21,8 @@ const Add = ({ setAddScreen }) => {
     const fetchData = async () => {
       try {
         const [categoryRes, sellerRes] = await Promise.all([
-          axios.get("http://localhost:3000/api/categories"),
-          axios.get("http://localhost:3000/api/sellers"),
+          axios.get(`${URL}/categories`),
+          axios.get(`${URL}/sellers`),
         ]);
 
         if (categoryRes.data.success) setCategories(categoryRes.data.data);
@@ -41,7 +43,7 @@ const Add = ({ setAddScreen }) => {
 
   const addProduct = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/api/addproduct", formData);
+      const response = await axios.post(`${URL}/addproduct`, formData);
       if (response.data.success) {
         toast.success("Product added successfully!");
         setAddScreen(false);

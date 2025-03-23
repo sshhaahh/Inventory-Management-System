@@ -11,7 +11,7 @@ import Orders from './pages/Orders'
 
 const App = () => {
   const URL = import.meta.env.VITE_BACKEND_URL;
-  console.log(URL)
+  
   
   return (
     <div className='bg-[#ECDFCC] min-h-screen lg:grid lg:grid-cols-[15%_70%] gap-6 lg:text-xl'>

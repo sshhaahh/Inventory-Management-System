@@ -22,8 +22,8 @@ router.get("/categories",showAllCategory);
 router.delete("/deleteCategory/:id",deleteCategory)
 
 
-router.post("/addcustomer",addCustomer);
-router.get("/customers",showAllCustomer);
+// router.post("/addcustomer",addCustomer);
+// router.get("/customers",showAllCustomer);
 
 
 router.post("/addtocart", addToCart);

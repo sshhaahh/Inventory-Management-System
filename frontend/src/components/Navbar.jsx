@@ -23,7 +23,7 @@ const Navbar = () => {
 
       <ul className='hidden md:flex justify-center items-center p-3 font-bold text-black text-2xl bg-[#3C3D37] shadow-2xl lg:flex-col lg:min-h-screen lg:gap-y-2 transition-all duration-100 ease-in-out'>
         {navItems.map((item, index) => (
-          <li key={index} className='p-3 rounded-2xl bg-white shadow-2xl w-5/5 text-center'>
+          <li key={index} className='p-3 rounded-2xl bg-white/70 backdrop-blur-sm shadow-2xl w-5/5 text-center'>
             <NavLink
               to={item.path}
               className={({ isActive }) =>
